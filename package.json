@@ -1,0 +1,28 @@
+{
+  "name": "floodguard-ai",
+  "version": "1.0.0",
+  "description": "FloodGuard AI - Municipal Flood Monitoring, AI Risk Assessment & Incident Response MVP",
+  "main": "server/server.js",
+  "scripts": {
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "server": "cd server && node server.js",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "cd client && npm run build",
+    "start": "cd server && node server.js"
+  },
+  "keywords": [
+    "flood-monitoring",
+    "iot",
+    "esp32",
+    "ai",
+    "gis",
+    "hydrology",
+    "early-warning"
+  ],
+  "author": "FloodGuard AI Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
