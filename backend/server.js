@@ -43,6 +43,23 @@ const dataStore = new FloodGuardDataStore(io);
 // Connect Database (Async with safe fallback)
 connectDB();
 
+// Root Endpoint
+app.get('/', (req, res) => {
+  res.json({
+    message: '🌊 Welcome to FloodGuard AI Backend API & Real-Time Engine',
+    status: 'ONLINE',
+    database: getDbStatus(),
+    endpoints: {
+      health: '/api/health',
+      stations: '/api/stations',
+      alerts: '/api/alerts',
+      logs: '/api/logs',
+      telemetry: '/api/telemetry',
+      ai: '/api/ai'
+    }
+  });
+});
+
 // Mount API Routes
 app.use('/api/auth', authRouter);
 app.use('/api/stations', createStationRoutes(dataStore));
