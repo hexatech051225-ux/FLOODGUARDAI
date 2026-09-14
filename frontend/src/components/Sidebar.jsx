@@ -6,12 +6,15 @@ import {
   Gauge, 
   BrainCircuit, 
   BellRing, 
+  Bell,
   FileText, 
   TrendingUp, 
+  BarChart3,
   Cpu, 
   History,
   Terminal,
-  Sliders
+  Sliders,
+  Sparkles
 } from 'lucide-react';
 import { useFloodData } from '../context/FloodDataContext';
 
@@ -24,6 +27,9 @@ export const Sidebar = ({ activeTab, setActiveTab }) => {
   const menuItems = [
     { id: 'overview', label: 'Command Center', icon: LayoutDashboard, badge: null },
     { id: 'hardware', label: 'Live Hardware Test', icon: Activity, badge: 'TEST 🟢', badgeColor: 'bg-emerald-950 text-emerald-300 border-emerald-600/50 animate-pulse' },
+    { id: 'ml_test', label: 'ML Test Suite', icon: Sparkles, badge: 'TESTS', badgeColor: 'bg-cyan-950 text-cyan-300 border-cyan-600/50' },
+    { id: 'analytics', label: 'Advanced Visualizations', icon: BarChart3, badge: 'PLOTS', badgeColor: 'bg-blue-950 text-blue-300 border-blue-600/50' },
+    { id: 'notifications', label: 'Alarm Notifications', icon: Bell, badge: 'ALERTS', badgeColor: 'bg-rose-950 text-rose-300 border-rose-600/50 animate-pulse' },
     { id: 'map', label: 'GIS Flood Map', icon: MapPin, badge: criticalCount > 0 ? `${criticalCount} Critical` : null, badgeColor: 'bg-rose-950 text-rose-300 border-rose-600/50' },
     { id: 'telemetry', label: 'Sensor Telemetry', icon: Gauge, badge: `${stations.length} Stns` },
     { id: 'packets', label: 'IoT Packet Terminal', icon: Terminal, badge: 'Live RX', badgeColor: 'bg-emerald-950 text-emerald-300 border-emerald-600/50' },

@@ -17,6 +17,9 @@ import { StationDetailModal } from './components/StationDetailModal';
 import { EvacuationBroadcastModal } from './components/EvacuationBroadcastModal';
 import { IotPacketTerminal } from './components/IotPacketTerminal';
 import { LiveHardwareTest } from './components/LiveHardwareTest';
+import { MlTestcaseSuite } from './components/MlTestcaseSuite';
+import { AdvancedDataVisualizations } from './components/AdvancedDataVisualizations';
+import { NotificationCenter } from './components/NotificationCenter';
 
 export const App = () => {
   const { user } = useAuth();
@@ -102,6 +105,27 @@ export const App = () => {
           {activeTab === 'hardware' && (
             <div className="animate-fade-in space-y-4">
               <LiveHardwareTest />
+            </div>
+          )}
+
+          {/* Machine Learning Testcase Suite Tab */}
+          {activeTab === 'ml_test' && (
+            <div className="animate-fade-in space-y-4">
+              <MlTestcaseSuite />
+            </div>
+          )}
+
+          {/* Advanced Visualizations Tab */}
+          {activeTab === 'analytics' && (
+            <div className="animate-fade-in space-y-4">
+              <AdvancedDataVisualizations />
+            </div>
+          )}
+
+          {/* Emergency Alarm Notifications Tab */}
+          {activeTab === 'notifications' && (
+            <div className="animate-fade-in space-y-4">
+              <NotificationCenter />
             </div>
           )}
 
