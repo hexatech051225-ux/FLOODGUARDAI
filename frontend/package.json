@@ -1,5 +1,5 @@
 {
-  "name": "floodguard-ai-client",
+  "name": "floodguard-ai-frontend",
   "version": "1.0.0",
   "private": true,
   "type": "module",

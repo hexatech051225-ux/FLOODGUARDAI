@@ -50,14 +50,18 @@ npm run install:all
 
 Or manually:
 ```bash
-cd server && npm install
-cd ../client && npm install
+cd backend && npm install
+cd ../frontend && npm install
 ```
 
 ### 2. Start the full application (Concurrent Dev Mode):
 ```bash
 # From the root directory:
 npm run dev
+
+# Or run frontend / backend individually:
+npm run frontend
+npm run backend
 ```
 
 - **Frontend Command Center**: [http://localhost:5173](http://localhost:5173)

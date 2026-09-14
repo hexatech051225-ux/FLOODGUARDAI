@@ -1,12 +1,13 @@
 {
-  "name": "floodguard-ai-server",
+  "name": "floodguard-ai-backend",
   "version": "1.0.0",
   "description": "Backend API, AI Risk Analysis Engine & IoT Telemetry Gateway for FloodGuard AI",
   "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "seed": "node scripts/seedDatabase.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
