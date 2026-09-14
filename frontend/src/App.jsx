@@ -16,6 +16,7 @@ import { HistoricalEvents } from './components/HistoricalEvents';
 import { StationDetailModal } from './components/StationDetailModal';
 import { EvacuationBroadcastModal } from './components/EvacuationBroadcastModal';
 import { IotPacketTerminal } from './components/IotPacketTerminal';
+import { LiveHardwareTest } from './components/LiveHardwareTest';
 
 export const App = () => {
   const { user } = useAuth();
@@ -94,6 +95,13 @@ export const App = () => {
                   onOpenResponseLog={handleOpenResponseLog}
                 />
               </div>
+            </div>
+          )}
+
+          {/* Live Hardware Test Tab */}
+          {activeTab === 'hardware' && (
+            <div className="animate-fade-in space-y-4">
+              <LiveHardwareTest />
             </div>
           )}
 

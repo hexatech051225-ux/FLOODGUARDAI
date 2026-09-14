@@ -22,6 +22,7 @@ export const Sidebar = ({ activeTab, setActiveTab }) => {
 
   const menuItems = [
     { id: 'overview', label: 'Command Center', icon: LayoutDashboard, badge: null },
+    { id: 'hardware', label: 'Live Hardware Test', icon: Activity, badge: 'TEST 🟢', badgeColor: 'bg-emerald-950 text-emerald-300 border-emerald-600/50 animate-pulse' },
     { id: 'map', label: 'GIS Flood Map', icon: MapPin, badge: criticalCount > 0 ? `${criticalCount} Critical` : null, badgeColor: 'bg-rose-950 text-rose-300 border-rose-600/50' },
     { id: 'telemetry', label: 'Sensor Telemetry', icon: Gauge, badge: `${stations.length} Stns` },
     { id: 'packets', label: 'IoT Packet Terminal', icon: Terminal, badge: 'Live RX', badgeColor: 'bg-emerald-950 text-emerald-300 border-emerald-600/50' },

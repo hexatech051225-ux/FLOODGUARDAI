@@ -195,10 +195,39 @@ export class FloodGuardDataStore {
     }
   }
 
-  // IoT / Gateway ingestion endpoint (from physical ESP32 or RPi Gateway)
   ingestTelemetry(payload) {
-    const { stationId, waterLevel, rainfallIntensity, flowVelocity, batteryVoltage, signalRssi } = payload;
-    const station = this.stations.find(s => s.id === stationId || s.code === stationId);
+    const { 
+      stationId = 'ST-001', 
+      waterLevel, 
+      rainfallIntensity, 
+      flowVelocity, 
+      waterTemperature,
+      batteryVoltage, 
+      signalRssi,
+      // Physical IoT Sensor & Status Fields
+      waterDistance,
+      rainValue,
+      rainStatus,
+      flowPulses,
+      flowRate,
+      floatStatus,
+      relayStatus,
+      ajsr04mDistance,
+      waterStatus,
+      dht11Status,
+      ds18b20Status,
+      ds18b20Temp,
+      floatStatus2,
+      gpsStatus,
+      rgbStatus,
+      buzzerStatus,
+      buttonStatus,
+      esp1Status,
+      esp2Status,
+      gatewayStatus
+    } = payload;
+
+    const station = this.stations.find(s => s.id === stationId || s.code === stationId) || this.stations[0];
     if (!station) {
       return { success: false, message: `Station ${stationId} not found` };
     }
@@ -207,10 +236,39 @@ export class FloodGuardDataStore {
     if (waterLevel !== undefined) station.currentTelemetry.waterLevel = Number(waterLevel);
     if (rainfallIntensity !== undefined) station.currentTelemetry.rainfallIntensity = Number(rainfallIntensity);
     if (flowVelocity !== undefined) station.currentTelemetry.flowVelocity = Number(flowVelocity);
+    if (waterTemperature !== undefined || ds18b20Temp !== undefined) {
+      station.currentTelemetry.waterTemperature = Number(ds18b20Temp !== undefined ? ds18b20Temp : waterTemperature);
+    }
     if (batteryVoltage !== undefined) station.deviceHealth.batteryVoltage = Number(batteryVoltage);
     if (signalRssi !== undefined) station.deviceHealth.signalRssi = Number(signalRssi);
+    
     station.currentTelemetry.timestamp = now;
     station.deviceHealth.lastPing = now;
+
+    // Attach expanded hardware telemetry diagnosis object
+    station.hardwareTelemetry = {
+      waterDistance: waterDistance !== undefined ? Number(waterDistance) : Number((5.2 - station.currentTelemetry.waterLevel).toFixed(4)),
+      rainValue: rainValue !== undefined ? Number(rainValue) : (station.currentTelemetry.rainfallIntensity > 0 ? 320 : 1023),
+      rainStatus: rainStatus || (station.currentTelemetry.rainfallIntensity > 20 ? 'WET' : 'DRY'),
+      flowPulses: flowPulses !== undefined ? Number(flowPulses) : 0,
+      flowRate: flowRate !== undefined ? Number(flowRate) : Number((station.currentTelemetry.flowVelocity * 60).toFixed(2)),
+      floatStatus: floatStatus || 'NORMAL',
+      relayStatus: relayStatus || (station.currentTelemetry.waterLevel > 4.0 ? 'ON' : 'OFF'),
+      ajsr04mDistance: ajsr04mDistance !== undefined ? Number(ajsr04mDistance) : 1.85,
+      waterStatus: waterStatus || (station.currentTelemetry.waterLevel > 4.0 ? 'SURGE' : 'NORMAL'),
+      dht11Status: dht11Status || 'OK',
+      ds18b20Status: ds18b20Status || 'OK',
+      ds18b20Temp: ds18b20Temp !== undefined ? Number(ds18b20Temp) : (station.currentTelemetry.waterTemperature || 23.5),
+      floatStatus2: floatStatus2 || floatStatus || 'NORMAL',
+      gpsStatus: gpsStatus || 'LOCKED',
+      rgbStatus: rgbStatus || (station.riskAnalysis?.riskLevel === 'CRITICAL' ? 'RED' : station.riskAnalysis?.riskLevel === 'HIGH RISK' ? 'YELLOW' : 'GREEN'),
+      buzzerStatus: buzzerStatus || (station.riskAnalysis?.riskLevel === 'CRITICAL' ? 'ON' : 'OFF'),
+      buttonStatus: buttonStatus || 'RELEASED',
+      esp1Status: esp1Status || 'ONLINE',
+      esp2Status: esp2Status || 'ONLINE',
+      gatewayStatus: gatewayStatus || 'ONLINE',
+      lastTelemetryReceived: now
+    };
 
     // Trigger AI analysis
     const historyPoints = this.history.get(station.id) || [];
@@ -221,11 +279,12 @@ export class FloodGuardDataStore {
       this.io.emit('telemetry:update', {
         stations: this.stations,
         updatedStationId: station.id,
+        hardwareTelemetry: station.hardwareTelemetry,
         timestamp: now
       });
     }
 
-    return { success: true, station };
+    return { success: true, station, hardwareTelemetry: station.hardwareTelemetry };
   }
 
   getStations() {
