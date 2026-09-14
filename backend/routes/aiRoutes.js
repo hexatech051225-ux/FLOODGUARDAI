@@ -91,5 +91,45 @@ export const createAiRoutes = (dataStore) => {
     }
   });
 
+  // POST Chat Assistant endpoint for natural language query processing
+  router.post('/chat', (req, res) => {
+    try {
+      const { message = '', stationId = 'ST-001' } = req.body;
+      const stations = dataStore.getStations();
+      const activeAlerts = dataStore.getAlerts('ACTIVE');
+      const targetStation = stations.find(s => s.id === stationId || s.code === stationId) || stations[0];
+      const query = message.toLowerCase();
+
+      let reply = '';
+      if (query.includes('st-001') || query.includes('ferry ghat') || query.includes('krishna')) {
+        reply = `🌊 Station ST-001 (${targetStation.name}) is currently at ${targetStation.currentTelemetry.waterLevel}m (${targetStation.currentTelemetry.waterLevelPercentage}% of channel capacity). Risk Level: ${targetStation.riskAnalysis.riskLevel} (Score: ${targetStation.riskAnalysis.riskScore}/100). Rate of rise is ${targetStation.currentTelemetry.rateOfRise > 0 ? '+' : ''}${targetStation.currentTelemetry.rateOfRise} cm/h.`;
+      } else if (query.includes('alert') || query.includes('warning') || query.includes('incident')) {
+        reply = `🚨 Currently there are ${activeAlerts.length} ACTIVE emergency alerts in the basin. ${activeAlerts.length > 0 ? `Latest alert: ${activeAlerts[0].title}` : 'All stations are within nominal thresholds.'}`;
+      } else if (query.includes('evacuat') || query.includes('shelter') || query.includes('civil defense')) {
+        reply = `📋 Civil Defense Evacuation Directive: In the event of a CRITICAL flood surge, citizens in low-lying zones along Krishna Basin & Budameru Diversion should proceed to primary shelters (Indira Gandhi Stadium / Government Polytechnic Enclosure). Emergency helpline: 1077 / 112.`;
+      } else if (query.includes('hardware') || query.includes('esp32') || query.includes('gateway')) {
+        reply = `🧪 Live Hardware Telemetry Pipeline: ESP32 #1 & ESP32 #2 microcontrollers post ultrasonic, DS18B20 temperature (23.5°C), float switch, and relay status to Raspberry Pi Gateway RPI-GW-01, which ingests to MongoDB Atlas Cluster0.`;
+      } else {
+        reply = `🤖 FloodGuard AI Hydrological Assistant: Station ${targetStation.name} water level is ${targetStation.currentTelemetry.waterLevel}m (${targetStation.riskAnalysis.riskLevel}). Current basin scenario is ${dataStore.scenario}. ${targetStation.riskAnalysis.aiRecommendation}`;
+      }
+
+      res.header('Access-Control-Allow-Origin', '*');
+      res.json({
+        success: true,
+        reply,
+        stationContext: {
+          id: targetStation.id,
+          name: targetStation.name,
+          level: targetStation.currentTelemetry.waterLevel,
+          risk: targetStation.riskAnalysis.riskLevel,
+          score: targetStation.riskAnalysis.riskScore
+        },
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
   return router;
 };

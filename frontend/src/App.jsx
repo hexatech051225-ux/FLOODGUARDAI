@@ -20,6 +20,7 @@ import { LiveHardwareTest } from './components/LiveHardwareTest';
 import { MlTestcaseSuite } from './components/MlTestcaseSuite';
 import { AdvancedDataVisualizations } from './components/AdvancedDataVisualizations';
 import { NotificationCenter } from './components/NotificationCenter';
+import { AiChatbotWidget } from './components/AiChatbotWidget';
 
 export const App = () => {
   const { user } = useAuth();
@@ -230,6 +231,9 @@ export const App = () => {
         isOpen={isEvacuationModalOpen}
         onClose={() => setIsEvacuationModalOpen(false)}
       />
+
+      {/* Floating FloodGuard AI Assistant Chatbot Widget */}
+      <AiChatbotWidget />
     </div>
   );
 };
