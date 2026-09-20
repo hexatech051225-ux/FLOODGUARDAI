@@ -15,6 +15,7 @@ import {
   RefreshCcw
 } from 'lucide-react';
 import { useFloodData } from '../context/FloodDataContext';
+import { AiAssistantLogo } from './AiAssistantLogo';
 
 export const AiChatbotWidget = () => {
   const { stations, alerts, scenario } = useFloodData();
@@ -128,11 +129,11 @@ export const AiChatbotWidget = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-2xl shadow-cyan-950/80 hover:scale-105 transition-all flex items-center space-x-2.5 border border-cyan-400/40 group"
+          className="fixed bottom-6 right-6 z-50 p-3.5 rounded-2xl bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 text-white shadow-2xl shadow-cyan-950/80 hover:scale-105 transition-all flex items-center space-x-2.5 border border-cyan-400/40 group"
           title="Open FloodGuard AI Assistant"
         >
-          <div className="relative">
-            <Bot className="w-6 h-6 text-white group-hover:rotate-12 transition" />
+          <div className="relative w-8 h-8 rounded-xl bg-slate-950/80 p-0.5 flex items-center justify-center border border-cyan-400/50">
+            <AiAssistantLogo className="w-full h-full object-contain group-hover:scale-110 transition" />
             <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-slate-900 animate-pulse" />
           </div>
           <div className="text-left font-mono">
@@ -148,8 +149,8 @@ export const AiChatbotWidget = () => {
           {/* Header */}
           <div className="p-4 bg-gradient-to-r from-slate-900 via-cyan-950/60 to-slate-900 border-b border-cyan-500/30 flex items-center justify-between">
             <div className="flex items-center space-x-2.5">
-              <div className="p-2 rounded-xl bg-cyan-950 border border-cyan-500/40 text-cyan-300">
-                <Bot className="w-5 h-5 text-cyan-400" />
+              <div className="w-9 h-9 rounded-xl bg-slate-950 border border-cyan-500/40 p-1 flex items-center justify-center">
+                <AiAssistantLogo className="w-full h-full object-contain" />
               </div>
               <div>
                 <h3 className="font-extrabold text-sm text-slate-100 flex items-center space-x-1.5">

@@ -21,6 +21,10 @@ import { MlTestcaseSuite } from './components/MlTestcaseSuite';
 import { AdvancedDataVisualizations } from './components/AdvancedDataVisualizations';
 import { NotificationCenter } from './components/NotificationCenter';
 import { AiChatbotWidget } from './components/AiChatbotWidget';
+import { YoloVisionCenter } from './components/YoloVisionCenter';
+import { AquaTwinSimulator } from './components/AquaTwinSimulator';
+import { CitizenPortalModal } from './components/CitizenPortalModal';
+import { SopPlaybookModal } from './components/SopPlaybookModal';
 
 export const App = () => {
   const { user } = useAuth();
@@ -99,6 +103,34 @@ export const App = () => {
                   onOpenResponseLog={handleOpenResponseLog}
                 />
               </div>
+            </div>
+          )}
+
+          {/* YOLOv8 Edge Vision & CCTV Command Center */}
+          {activeTab === 'vision' && (
+            <div className="animate-fade-in">
+              <YoloVisionCenter onOpenResponseLog={handleOpenResponseLog} />
+            </div>
+          )}
+
+          {/* AquaTwin™ Digital Twin Sandbox */}
+          {activeTab === 'digital-twin' && (
+            <div className="animate-fade-in">
+              <AquaTwinSimulator onOpenEvacuationModal={() => setIsEvacuationModalOpen(true)} />
+            </div>
+          )}
+
+          {/* Citizen Safety & SOS Portal Tab */}
+          {activeTab === 'citizen-portal' && (
+            <div className="animate-fade-in">
+              <CitizenPortalModal isOpen={true} onClose={() => setActiveTab('overview')} />
+            </div>
+          )}
+
+          {/* Disaster SOP Playbook Tab */}
+          {activeTab === 'sop-playbook' && (
+            <div className="animate-fade-in">
+              <SopPlaybookModal isOpen={true} onClose={() => setActiveTab('overview')} />
             </div>
           )}
 

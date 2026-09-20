@@ -10,6 +10,7 @@ import { createTelemetryRoutes } from './routes/telemetryRoutes.js';
 import { createAlertRoutes } from './routes/alertRoutes.js';
 import { createLogRoutes } from './routes/logRoutes.js';
 import { createAiRoutes } from './routes/aiRoutes.js';
+import { createVisionRoutes } from './routes/visionRoutes.js';
 import { authRouter } from './routes/authRoutes.js';
 
 dotenv.config();
@@ -67,6 +68,7 @@ app.use('/api/telemetry', createTelemetryRoutes(dataStore));
 app.use('/api/alerts', createAlertRoutes(dataStore));
 app.use('/api/logs', createLogRoutes(dataStore));
 app.use('/api/ai', createAiRoutes(dataStore));
+app.use('/api/vision', createVisionRoutes(dataStore, io));
 
 // System Health Check Endpoint
 app.get('/api/health', (req, res) => {

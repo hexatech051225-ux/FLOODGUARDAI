@@ -14,7 +14,10 @@ import {
   History,
   Terminal,
   Sliders,
-  Sparkles
+  Sparkles,
+  Camera,
+  LifeBuoy,
+  ClipboardCheck
 } from 'lucide-react';
 import { useFloodData } from '../context/FloodDataContext';
 
@@ -26,6 +29,8 @@ export const Sidebar = ({ activeTab, setActiveTab }) => {
 
   const menuItems = [
     { id: 'overview', label: 'Command Center', icon: LayoutDashboard, badge: null },
+    { id: 'vision', label: 'YOLO Vision & CCTV', icon: Camera, badge: 'YOLOv8 AI', badgeColor: 'bg-cyan-950 text-cyan-300 border-cyan-500/50' },
+    { id: 'digital-twin', label: 'AquaTwin™ Sandbox', icon: Sliders, badge: 'PHYSICS AI', badgeColor: 'bg-cyan-950 text-cyan-300 border-cyan-500/50' },
     { id: 'hardware', label: 'Live Hardware Test', icon: Activity, badge: 'TEST 🟢', badgeColor: 'bg-emerald-950 text-emerald-300 border-emerald-600/50 animate-pulse' },
     { id: 'ml_test', label: 'ML Test Suite', icon: Sparkles, badge: 'TESTS', badgeColor: 'bg-cyan-950 text-cyan-300 border-cyan-600/50' },
     { id: 'analytics', label: 'Advanced Visualizations', icon: BarChart3, badge: 'PLOTS', badgeColor: 'bg-blue-950 text-blue-300 border-blue-600/50' },
@@ -35,6 +40,8 @@ export const Sidebar = ({ activeTab, setActiveTab }) => {
     { id: 'packets', label: 'IoT Packet Terminal', icon: Terminal, badge: 'Live RX', badgeColor: 'bg-emerald-950 text-emerald-300 border-emerald-600/50' },
     { id: 'ai', label: 'AI Risk Engine', icon: BrainCircuit, badge: 'ML Live', badgeColor: 'bg-cyan-950 text-cyan-300 border-cyan-600/50' },
     { id: 'alerts', label: 'Alerts & Incidents', icon: BellRing, badge: activeAlertsCount > 0 ? `${activeAlertsCount}` : null, badgeColor: 'bg-rose-950 text-rose-300 border-rose-600/50 animate-pulse' },
+    { id: 'citizen-portal', label: 'Citizen Safety & SOS', icon: LifeBuoy, badge: 'PUBLIC', badgeColor: 'bg-emerald-950 text-emerald-300 border-emerald-600/50' },
+    { id: 'sop-playbook', label: 'Disaster SOP Playbook', icon: ClipboardCheck, badge: 'SOP', badgeColor: 'bg-indigo-950 text-indigo-300 border-indigo-600/50' },
     { id: 'logs', label: 'Response Action Log', icon: FileText, badge: null },
     { id: 'charts', label: 'Historical Trends', icon: TrendingUp, badge: null },
     { id: 'devices', label: 'IoT Gateway Health', icon: Cpu, badge: null },

@@ -61,13 +61,23 @@ export class AiRiskEngine {
       else drainageScore = 3;
     }
 
-    const totalRawScore = Math.round(levelScore + riseScore + rainScore + drainageScore);
+    // Factor E: YOLOv8 Computer Vision Multimodal Analysis
+    const vision = station.visionTelemetry || (station.currentTelemetry && station.currentTelemetry.vision) || null;
+    let visionScore = 0;
+    if (vision) {
+      if (vision.submergedVehiclesCount > 0) visionScore += 35;
+      if (vision.debrisBlockedPercentage > 60) visionScore += 20;
+      else if (vision.debrisBlockedPercentage > 30) visionScore += 10;
+      if (vision.pedestrianHazardCount > 0) visionScore += 25;
+    }
+
+    const totalRawScore = Math.round(levelScore + riseScore + rainScore + drainageScore + visionScore);
     const riskScore = Math.min(100, Math.max(5, totalRawScore));
 
     let riskLevel = 'SAFE';
-    if (riskScore >= 80 || waterLevel >= dangerThresholds.critical) {
+    if (riskScore >= 80 || waterLevel >= dangerThresholds.critical || vision?.submergedVehiclesCount > 0) {
       riskLevel = 'CRITICAL';
-    } else if (riskScore >= 60 || waterLevel >= dangerThresholds.highRisk) {
+    } else if (riskScore >= 60 || waterLevel >= dangerThresholds.highRisk || vision?.debrisBlockedPercentage > 60) {
       riskLevel = 'HIGH RISK';
     } else if (riskScore >= 35 || waterLevel >= dangerThresholds.warning) {
       riskLevel = 'WATCH';
@@ -76,6 +86,27 @@ export class AiRiskEngine {
     }
 
     const anomalies = [];
+
+    // YOLOv8 Vision Anomaly - Submerged Vehicle
+    if (vision?.submergedVehiclesCount > 0) {
+      anomalies.push({
+        type: 'VISION_VEHICLE_STRANDED',
+        severity: 'CRITICAL',
+        message: `🚨 YOLOv8 Vision AI: ${vision.submergedVehiclesCount} submerged vehicle(s) detected in roadway flood basin`,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    // YOLOv8 Vision Anomaly - Severe Culvert Trash / Debris Obstruction
+    if (vision?.debrisBlockedPercentage > 50) {
+      anomalies.push({
+        type: 'VISION_DEBRIS_DETECTED',
+        severity: vision.debrisBlockedPercentage > 75 ? 'CRITICAL' : 'HIGH',
+        message: `YOLOv8 Vision AI: Culvert trash rack obstructed (${vision.debrisBlockedPercentage}% blockage). Hydraulic bottleneck detected.`,
+        timestamp: new Date().toISOString()
+      });
+    }
+
     if (rateOfRise > 18.0) {
       anomalies.push({
         type: 'SURGE_ANOMALY',
