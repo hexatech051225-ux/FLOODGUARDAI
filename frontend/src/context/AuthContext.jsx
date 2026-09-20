@@ -16,9 +16,9 @@ const DEFAULT_USER = {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('floodguard_user');
-    return saved ? JSON.parse(saved) : DEFAULT_USER;
+    return saved ? JSON.parse(saved) : null;
   });
-  const [token, setToken] = useState(() => localStorage.getItem('floodguard_token') || 'demo-token');
+  const [token, setToken] = useState(() => localStorage.getItem('floodguard_token') || null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
